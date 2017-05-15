@@ -30,7 +30,7 @@ app.use((req, res, next) => {
 });
 
 app.get('/search/:q', (req, res) => {
-  loadArticle(req.params.p).then((results) => {
+  loadArticle(req.params.q).then((results) => {
     res.json({ results });
   }).catch((err) => {
     console.error('Error loading results:', err);
@@ -101,12 +101,12 @@ function makeRequest(title) {
 function sanitizeTitle(title) {
   return encodeURIComponent(
     title.split(/\s+/g)
-    .filter(s => s != '')
-    .map((s) => {
-      const lower = s.toLowerCase();
-      return lower.charAt(0).toUpperCase() + lower.slice(1);
-    })
-    .join(' ')
+      .filter(s => s != '')
+      .map((s) => {
+        const lower = s.toLowerCase();
+        return lower.charAt(0).toUpperCase() + lower.slice(1);
+      })
+      .join(' ')
   );
 }
 
