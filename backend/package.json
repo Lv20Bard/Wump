@@ -1,0 +1,23 @@
+{
+  "name": "wumpnode",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Andrew MacDonald <andrewmacdonald971@gmail.com> (http://bidsquid.ca)",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.17.1",
+    "express": "^4.15.2",
+    "http-status-codes": "^1.1.6",
+    "mongodb": "^2.2.26",
+    "mongoose": "^4.9.9",
+    "natural": "^0.5.1",
+    "pluralize": "^4.0.0",
+    "request": "^2.81.0",
+    "request-promise": "^4.2.1",
+    "stopword": "^0.1.1"
+  }
+}
