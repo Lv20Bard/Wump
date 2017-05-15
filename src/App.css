@@ -1,0 +1,33 @@
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+a,
+p {
+
+}
+
+body{
+  background-color: #f5f8fa;
+  height: 100%;
+}
+
+.header{
+  background: #ffffff;
+  height: 45px;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+  border-bottom: 1px solid rgba(0,0,0,0.15);
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  z-index: 500;
+}
+
+.main{
+  top:45px;
+  height: 100%;
+  position: relative;
+}
