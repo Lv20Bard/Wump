@@ -150,3 +150,8 @@ function loadArticle(title) {
     console.log(recurrances);
   }
 });*/
+
+(function (port) {
+  console.log(`Listening on port ${port}...`);
+  server.listen(port);
+})(9001);
