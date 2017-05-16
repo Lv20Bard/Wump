@@ -38,6 +38,12 @@ li{
   z-index: 500;
 }
 
+.brand{
+  padding:11px;
+  font-size: 18px;
+  line-height: 20px;
+}
+
 .main{
   top:45px;
   height: 100%;

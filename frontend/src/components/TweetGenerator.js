@@ -17,9 +17,20 @@ export default class TweetGenerator extends Component{
 
       }
 
-      handleSubmit(){
-            // Axios Call For adding to database
-            console.log(this.state.url);
+      handleSubmit(event){
+            event.preventDefault();
+            if(this.state.url !== ""){
+                  axios.get(`http://localhost:9001/search/${this.state.url}`)
+                  .then((res) => {
+                        console.log(res);
+                  })
+                  .catch((err) => {
+                        console.log(err);
+                  });
+            }
+            this.setState({url:""});
+
+            
       }
 
       handleURLChange(e){
@@ -44,3 +55,16 @@ export default class TweetGenerator extends Component{
             )
       }
 }
+
+// var pattern = new RegExp('^(https?:\/\/)?'+ // protocol
+//     '((([a-z\d]([a-z\d-]*[a-z\d])*)\.)+[a-z]{2,}|'+ // domain name
+//     '((\d{1,3}\.){3}\d{1,3}))'+ // OR ip (v4) address
+//     '(\:\d+)?(\/[-a-z\d%_.~+]*)*'+ // port and path
+//     '(\?[;&a-z\d%_.~+=-]*)?'+ // query string
+//     '(\#[-a-z\d_]*)?$','i'); // fragment locater
+//   if(!pattern.test(str)) {
+//     alert("Please enter a valid URL.");
+//     return false;
+//   } else {
+//     return true;
+//   }

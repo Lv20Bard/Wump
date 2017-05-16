@@ -13,7 +13,16 @@ export default class TweetFeed extends Component {
 
       // Get all the wumps
       componentDidMount(){
-
+            axios.get('http://localhost:9001/saved')
+            .then((res) => {
+                  console.log(res.data.tweets);
+                  this.setState({wumps:res.data.tweets});
+            })
+            .catch(function(err){
+                  if(err){
+                        console.log(err);
+                  }
+            });
       }
 
 

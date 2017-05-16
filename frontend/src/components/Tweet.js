@@ -20,7 +20,7 @@ export default class Tweet extends Component{
                                     </div>
                                     
                                     <div className="tweetBody col-sm-12">
-                                          <p> {this.props.data.content}</p>
+                                          <p> {this.props.data}</p>
                                     </div>
                               </div>
 
