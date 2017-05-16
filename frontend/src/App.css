@@ -6,13 +6,25 @@ h5,
 h6,
 a,
 p {
-
+  font-family: Helvetica, Arial , sans-serif;
 }
 
 body{
   background-color: #f5f8fa;
   height: 100%;
+
+  color: black;
+  line-height: 18px;
+  font-size: 14px;
 }
+
+textarea, input, button { outline: none; }
+
+ol,
+li{
+  list-style-type:none;
+}
+
 
 .header{
   background: #ffffff;
@@ -30,4 +42,153 @@ body{
   top:45px;
   height: 100%;
   position: relative;
+}
+
+
+
+
+
+.mainWrapper{
+  padding-top: 15px;
+}
+
+/*CSS for Generator Section*/
+.generatorWrapper{
+  border-radius:5px 5px 0 0;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #e6ecf0;
+  height: 190px;
+}
+
+.innerGenerator{
+  border-radius: 3px 3px 0 0;
+  position: relative;
+  background-color: #E8F5FD;
+  padding:10px 10px;
+  height: 100%;
+}
+
+.avatarImage{
+  left:30px;
+  position: absolute;
+  top: 15px;
+
+  height: 32px;
+  widows: 32px;
+  border-radius: 4px;
+}
+
+.wumpForm{
+  margin-left: 52px;
+  margin-bottom: 0;
+  margin-top: 0;
+  display: block;
+  clear: both;
+  widows: 500px;
+  height: 130px;
+
+}
+
+.wumpContent{
+  resize: none;
+  border-radius: 4px;
+  border-color: #339dc3;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.05), 0 1px 0 #fff;
+  height:120px;
+  width: 845px;
+  margin-left: 10px;
+    border-style: solid;
+  border-width: 1px;
+}
+
+.wumpBtn{
+  position: absolute;
+  bottom: 10px;
+  right: 24px;
+  
+
+  background-color: #0084B4;
+  background:rgba(0,132,180,.8);
+  border:1px solid transparent;
+  padding:9px 16px 8px 17px;
+  text-align: center;
+  font-weight: bold;
+  border-radius: 4px;
+  width: 100px;
+  height: 40px;
+  color: white;
+}
+
+/*CSS for wump feed*/
+.feedSectionWrapper{
+  background: #fff;
+  height: 100%;
+  padding: 0;
+  border-color: #e6ecf0;
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 0 0 5px 5px;
+}
+
+.feedSectionInner{
+  border-radius: 3px 3px 0 0;
+  position: relative;
+  
+  padding:0;
+
+  width: 100%;
+  height: 100%;
+}
+
+.feedItem{
+  background: #fff;
+  border-left: 1px solid #e6ecf0;
+  border-right: 1px solid #e6ecf0;
+  background-clip: padding-box;
+}
+
+.tweetWrapper{
+  position: relative;
+  min-height: 60px;
+  padding: 10px 15px;
+  border-bottom:1px solid #e6ecf0;
+
+  width:100%;
+}
+
+.content{
+  margin-left: 60px;
+  width: 100%;
+  height: 100%;
+}
+
+.tweetHeader{
+  color:black;
+  font-weight: bold;
+}
+
+.wumpHandle{
+  color: #657786;
+  font-weight: lighter;
+}
+
+.tweetBody{
+    word-wrap: break-word;
+}
+
+.avatar{
+  height: 48px;
+  width: 48px;
+  border-radius: 5px;
+  float:left;
+  margin-top:3px;
+  margin-left: 20px;
+  
+}
+
+@media (max-width: 1199px){
+  .wumpContent{
+  width: 645px;    
+  }
 }
