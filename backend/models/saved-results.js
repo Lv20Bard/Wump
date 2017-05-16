@@ -4,6 +4,8 @@ var savedResultsSchema = new mongoose.Schema({
   title: String,
   countMap: mongoose.Schema.Types.Mixed,
   sortedWords: [String],
+  adjectives: [String],
+  nouns: [String],
   timestamp: Date
 });
 
