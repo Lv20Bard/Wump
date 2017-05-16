@@ -40,10 +40,46 @@ app.use((req, res, next) => {
 });
 
 function createTweetString(savedResult) {
-  return savedResult.sortedWords
+  let str = decodeURIComponent(savedResult.title);
+  str += ': ' + savedResult.adjectives
     .slice(0, 10)
-    .map(word => word.charAt(0) + word.slice(1))
-    .join('. ');
+    .sort((a, b) => {
+      return 0.5 - Math.random();
+    })
+    .slice(0, 4)
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join('. ') + ' - ';
+
+  const rand = util.getRandomInt(0, 7);
+
+  switch (rand) {
+    case 0:
+      str += 'SAD!';
+      break;
+    case 1:
+      str += 'Phony hypocrites.';
+      break;
+    case 2:
+      str += 'NO!';
+      break;
+    case 3:
+      str += 'This is REAL news!';
+      break;
+    case 4:
+      str += '#FakeNews';
+      break;
+    case 5:
+      str += `We have the best ${savedResult.title}!`;
+      break;
+    case 6:
+      str += 'Sad!';
+      break;
+    case 7:
+      str += 'Not good.';
+      break;
+  }
+
+  return str;
 }
 
 
