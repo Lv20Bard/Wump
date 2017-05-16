@@ -39,10 +39,19 @@ app.use((req, res, next) => {
   }
 });
 
+function createTweetString(savedResult) {
+  return savedResult.sortedWords
+    .slice(0, 10)
+    .map(word => word.charAt(0) + word.slice(1))
+    .join('. ');
+}
+
 
 app.get('/saved', (req, res) => {
   SavedResults.find({}).sort({ timestamp: -1 }).then((savedResults) => {
-    res.json({ savedResults });
+    res.json({
+      tweets: savedResults.map(result => createTweetString(result))
+    });
   }).catch((err) => {
     console.error('Error finding saved results:', err);
     res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
@@ -53,7 +62,9 @@ app.get('/saved', (req, res) => {
 
 app.get('/search/:q', (req, res) => {
   loadArticle(req.params.q).then((results) => {
-    res.json({ results });
+    res.json({
+      tweets: results.map(result => createTweetString(result))
+    });
 
     // fill in with tweet data
     /*Promise.all(results.map((el, i) => {
