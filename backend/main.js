@@ -40,7 +40,9 @@ app.use((req, res, next) => {
 });
 
 function createTweetString(savedResult) {
-  let str = decodeURIComponent(savedResult.title);
+  const titleDecoded = decodeURIComponent(savedResult.title);
+
+  let str = titleDecoded;
   str += ': ' + savedResult.adjectives
     .slice(0, 10)
     .sort((a, b) => {
@@ -69,7 +71,7 @@ function createTweetString(savedResult) {
       str += '#FakeNews';
       break;
     case 5:
-      str += `We have the best ${savedResult.title}!`;
+      str += `We have the best ${titleDecoded}!`;
       break;
     case 6:
       str += 'Sad!';
@@ -188,7 +190,6 @@ app.get('/search/:q', (req, res) => {
 });
 
 function makeRequest(title) {
-  console.log('making request');
   return request(`https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro=&explaintext=&titles=${title}`, {
     method: 'GET'
   }).then((res) => {
