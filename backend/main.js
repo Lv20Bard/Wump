@@ -11,6 +11,34 @@ var wump = require('./wump');
 
 mongoose.connect('mongodb://localhost/wump');
 
+const app = express();
+const server = http.createServer(app);
+
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', config.CLIENT_SERVER_URL);
+  res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE');
+  res.header('Access-Control-Allow-Headers', 'Content-Type,x-access-token');
+  
+  if (req.method == 'OPTIONS') {
+    res.send(httpStatus.OK);
+  } else {
+    next();
+  }
+});
+
+app.get('/search/:q', (req, res) => {
+  loadArticle(req.params.q).then((results) => {
+    res.json({ results });
+  }).catch((err) => {
+    console.error('Error loading results:', err);
+    res.status(httpStatus.BAD_REQUEST).json({
+      error: err.message
+    });
+  });
+});
 
 function makeRequest(title) {
   console.log('making request');
@@ -73,12 +101,12 @@ function makeRequest(title) {
 function sanitizeTitle(title) {
   return encodeURIComponent(
     title.split(/\s+/g)
-    .filter(s => s != '')
-    .map((s) => {
-      const lower = s.toLowerCase();
-      return lower.charAt(0).toUpperCase() + lower.slice(1);
-    })
-    .join(' ')
+      .filter(s => s != '')
+      .map((s) => {
+        const lower = s.toLowerCase();
+        return lower.charAt(0).toUpperCase() + lower.slice(1);
+      })
+      .join(' ')
   );
 }
 
@@ -99,12 +127,6 @@ function loadArticle(title) {
     return makeRequest(titleSanitized);
   }
 }
-
-loadArticle('Stack Overflow').then((results) => {
-  console.log('results = ', results);
-}).catch((err) => {
-  console.error('Error loading results:', err);
-});
 
 /*request('https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro=&explaintext=&titles=Stack%20Overflow', {
   method: 'GET'
@@ -128,3 +150,8 @@ loadArticle('Stack Overflow').then((results) => {
     console.log(recurrances);
   }
 });*/
+
+(function (port) {
+  console.log(`Listening on port ${port}...`);
+  server.listen(port);
+})(9001);
