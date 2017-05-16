@@ -2,11 +2,12 @@ import React,{Component} from 'react';
 import axios from 'axios';
 
 export default class TweetGenerator extends Component{
+      static propTypes = {
+            onWumpPosted: React.PropTypes.func.isRequired
+      };
+
       constructor(props){
             super(props);
-
-
-            
 
             this.state = {
                   url:""
@@ -22,10 +23,10 @@ export default class TweetGenerator extends Component{
             if(this.state.url !== ""){
                   axios.get(`http://localhost:9001/search/${this.state.url}`)
                   .then((res) => {
-                        console.log(res);
+                        this.props.onWumpPosted(res.data.tweets[0]);
                   })
                   .catch((err) => {
-                        console.log(err);
+                        console.error(err);
                   });
             }
             this.setState({url:""});
