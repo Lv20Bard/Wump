@@ -52,9 +52,6 @@ module.exports = {
 
   parsePages(pages) {
     return Promise.all(pages.map(({ title, extract }) => {
-      const ngrams = NGrams.trigrams(extract);
-      console.log('ngrams = ', ngrams);
-
       return new Promise((resolve, reject) => {
         this.filterWords(title, (titleWords) => {
           this.filterWords(extract, (words) => {
@@ -142,10 +139,6 @@ module.exports = {
         return 1;
       }
     });
-
-
-
-    console.log('std dev = ', util.standardDeviation(Object.keys(countMap).map(key => key.length)));
 
     // compare the top items to check if they are too similar
 

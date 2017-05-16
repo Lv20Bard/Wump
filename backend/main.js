@@ -39,6 +39,18 @@ app.use((req, res, next) => {
   }
 });
 
+
+app.get('/saved', (req, res) => {
+  SavedResults.find({}).sort({ timestamp: -1 }).then((savedResults) => {
+    res.json({ savedResults });
+  }).catch((err) => {
+    console.error('Error finding saved results:', err);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
+      error: err.message
+    });
+  });
+});
+
 app.get('/search/:q', (req, res) => {
   loadArticle(req.params.q).then((results) => {
     res.json({ results });
