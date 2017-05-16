@@ -157,35 +157,7 @@ function makeRequest(title) {
       }));
     });
 
-  });/*, function (err, res, body) {
-    if (err) {
-      console.error('Error:', err);
-    } else {
-      const bodyJson = JSON.parse(body);
-      const pages = Object.keys(bodyJson.query.pages).map((key) => {
-        const page = bodyJson.query.pages[key];
-        return {
-          title: page.title,
-          extract: page.extract
-        };
-      });
-
-      const parsed = wump.parsePages(pages);
-      const recurrances = parsed.map((page) => {
-        const { countMap, sorted } = wump.countRecurrances(page.words);
-
-        new SavedResults({
-          title: page.title,
-          countMap: countMap,
-          sortedWords: sorted,
-          timestamp: new Date
-        }).then((savedResults) => {
-          
-        })
-      });
-      
-    }
-  });*/
+  });
 }
 
 function sanitizeTitle(title) {
@@ -217,29 +189,6 @@ function loadArticle(title) {
     return makeRequest(titleSanitized);
   }
 }
-
-/*request('https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro=&explaintext=&titles=Stack%20Overflow', {
-  method: 'GET'
-}, function (err, res, body) {
-  if (err) {
-    console.error('Error:', err);
-  } else {
-    const bodyJson = JSON.parse(body);
-    const pages = Object.keys(bodyJson.query.pages).map((key) => {
-      const page = bodyJson.query.pages[key];
-      return {
-        title: page.title,
-        extract: page.extract
-      };
-    });
-
-    const parsed = wump.parsePages(pages);
-    const recurrances = parsed.map((page) => {
-      return wump.countRecurrances(page.words);
-    });
-    console.log(recurrances);
-  }
-});*/
 
 (function (port) {
   console.log(`Listening on port ${port}...`);
