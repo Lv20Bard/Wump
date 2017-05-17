@@ -15,7 +15,10 @@ export default class Main extends Component{
 
       // Get all the wumps
       componentDidMount(){
+
             this.loadWumps(0,10);
+
+           
 
             if (typeof window.socket !== undefined) {
                   // add socket listener

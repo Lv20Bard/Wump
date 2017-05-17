@@ -25,7 +25,7 @@ export default class TweetFeed extends Component {
                         </ol>
                         {/*<VisibilitySensor onChange={onChange} />*/}
                   </div>
-                
+
             )
       }
 }
