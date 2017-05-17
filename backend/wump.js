@@ -19,8 +19,9 @@ module.exports = {
   parseExtract(wordsFiltered) {
     return Promise.all([
       this.filterAdjectives(wordsFiltered),
-      this.filterNouns(wordsFiltered)
-    ]).then(([adjectives, nouns]) => {
+      this.filterNouns(wordsFiltered),
+      this.filterAdverbs(wordsFiltered),
+    ]).then(([adjectives, nouns, adverbs]) => {
       return {
         adjectives: adjectives.sort((a, b) => {
           const aIndex = wordsFiltered.indexOf(a);
@@ -38,8 +39,6 @@ module.exports = {
           const aIndex = wordsFiltered.indexOf(a);
           const bIndex = wordsFiltered.indexOf(b);
 
-          console.log('wordsFiltered = ', [a, b], [aIndex, bIndex]);
-
           //console.log('[aIndex, bIndex = ', [aIndex, bIndex]);
           
           if (aIndex > bIndex) {
@@ -49,7 +48,19 @@ module.exports = {
           } else {
             return 0;
           }
-        })
+        }),
+        adverbs: adverbs.sort((a, b) => {
+          const aIndex = wordsFiltered.indexOf(a);
+          const bIndex = wordsFiltered.indexOf(b);
+          
+          if (aIndex > bIndex) {
+            return 1;
+          } else if (aIndex < bIndex) {
+            return -1;
+          } else {
+            return 0;
+          }
+        }),
       };
     });
   },
@@ -97,7 +108,7 @@ module.exports = {
 
   filterAdjectives(wordArray) {
     return new Promise((resolve, reject) => {
-      wordpos.getAdjectives(wordArray.join(' '), (result) => {
+      wordpos.getAdjectives(wordArray, (result) => {
         resolve(result);
       });
     });
@@ -105,7 +116,15 @@ module.exports = {
 
   filterNouns(wordArray) {
     return new Promise((resolve, reject) => {
-      wordpos.getNouns(wordArray.join(' '), (result) => {
+      wordpos.getNouns(wordArray, (result) => {
+        resolve(result);
+      });
+    });
+  },
+
+  filterAdverbs(wordArray) {
+    return new Promise((resolve, reject) => {
+      wordpos.getAdverbs(wordArray, (result) => {
         resolve(result);
       });
     });
