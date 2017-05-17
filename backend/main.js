@@ -130,9 +130,9 @@ function createTweetString(savedResult) {
 
 app.get('/saved/:offset/:amount', (req, res) => {
   SavedResults.find({})
+  .sort({ timestamp: -1 })
   .skip(parseInt(req.params.offset))
   .limit(parseInt(req.params.amount))
-  .sort({ timestamp: -1 })
   .then((savedResults) => {
     res.json({
       tweets: savedResults.map(result => ({

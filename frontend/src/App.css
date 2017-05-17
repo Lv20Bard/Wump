@@ -127,6 +127,25 @@ li{
   color: white;
 }
 
+.loadMoreBtn{
+  position: absolute;
+  bottom: 10px;
+  right: 24px;
+  
+
+  background-color: #0084B4;
+  background:rgba(0,132,180,.8);
+  border:1px solid transparent;
+  padding:9px 16px 8px 17px;
+  text-align: center;
+  font-weight: bold;
+  border-radius: 4px;
+  width: 100px;
+  height: 40px;
+  color: white;
+}
+
+
 /*CSS for wump feed*/
 .feedSectionWrapper{
   background: #fff;

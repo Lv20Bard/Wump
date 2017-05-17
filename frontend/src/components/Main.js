@@ -4,6 +4,9 @@ import axios from 'axios';
 import TweetFeed from './TweetFeed.js'
 import TweetGenerator from './TweetGenerator';
 
+
+import VisibilitySensor from 'react-visibility-sensor';
+
 export default class Main extends Component{
 
       constructor(props) {
@@ -30,12 +33,12 @@ export default class Main extends Component{
             }
       }
 
-      loadWumps(offset, amount){
+      loadWumps = (offset, amount) => {
             axios.get(`http://localhost:9001/saved/${offset}/${amount}`)
             .then((res) => {
                   console.log('saved:', res.data.tweets);
                   this.setState({
-                        wumps: res.data.tweets.concat(this.state.wumps)
+                        wumps: this.state.wumps.concat(res.data.tweets)
                   })
             })
             .catch(function(err){
@@ -45,6 +48,10 @@ export default class Main extends Component{
             });
 
       
+      }
+
+      loadMoreWumps = () => {
+            this.loadWumps(this.state.wumps.length, 10);
       }
 
       handleWumpPosted = (wump) => {
@@ -63,10 +70,12 @@ export default class Main extends Component{
                                     <TweetGenerator
                                           onWumpPosted={this.handleWumpPosted}
                                     />
-                                    <TweetFeed
-                                          wumps={this.state.wumps}
-                                    />
 
+                                    <TweetFeed wumps = {this.state.wumps}/>
+                                    
+
+                                    <button className="pull-right col-sm-2 btn loadMoreBtn" onClick={this.loadMoreWumps}>Load More </button>
+                                    
                               </div>
                               <div className="col-sm-1"></div>
                         </div>
