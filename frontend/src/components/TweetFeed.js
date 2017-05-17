@@ -1,6 +1,7 @@
 import React,{Component} from 'react';
 import Tweet from './Tweet';
 import axios from 'axios';
+import VisibilitySensor from 'react-visibility-sensor'
 
 export default class TweetFeed extends Component {
       static propTypes = {
@@ -28,6 +29,8 @@ export default class TweetFeed extends Component {
                               {allWumps}
                         </ol>
                   </div>
+                  <VisibilitySensor />
+                  
             )
       }
 }
