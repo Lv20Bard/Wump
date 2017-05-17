@@ -43,7 +43,7 @@ function createTweetString(savedResult) {
   const titleDecoded = decodeURIComponent(savedResult.title);
 
   let str = titleDecoded;
-  str += ': ' + savedResult.adjectives
+  str += ': ' + savedResult.nouns
     .slice(0, 10)
     .sort((a, b) => {
       return 0.5 - Math.random();
@@ -204,12 +204,12 @@ function makeRequest(title) {
 
     return wump.parsePages(pages).then((parsed) => {
       return Promise.all(parsed.map((page) => {
-        const { countMap, sorted } = wump.countRecurrances(page.words, config.MAX_COUNT);
+        
 
         return new SavedResults({
           title: sanitizeTitle(page.title),
-          countMap: countMap,
-          sortedWords: sorted,
+          countMap: page.countMap,
+          sortedWords: page.sorted,
           adjectives: page.adjectives,
           nouns: page.nouns,
           timestamp: new Date

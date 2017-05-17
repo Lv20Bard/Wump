@@ -25,6 +25,8 @@ module.exports = {
         adjectives: adjectives.sort((a, b) => {
           const aIndex = wordsFiltered.indexOf(a);
           const bIndex = wordsFiltered.indexOf(b);
+
+          //console.log('[aIndex, bIndex = ', [aIndex, bIndex]);
           
           if (aIndex > bIndex) {
             return 1;
@@ -37,6 +39,10 @@ module.exports = {
         nouns: nouns.sort((a, b) => {
           const aIndex = wordsFiltered.indexOf(a);
           const bIndex = wordsFiltered.indexOf(b);
+
+          console.log('wordsFiltered = ', [a, b], [aIndex, bIndex]);
+
+          //console.log('[aIndex, bIndex = ', [aIndex, bIndex]);
           
           if (aIndex > bIndex) {
             return 1;
@@ -72,9 +78,14 @@ module.exports = {
               return true;
             });
 
-            this.parseExtract(wordsFiltered).then((extractParsed) => {
+            
+            const { countMap, sorted } = this.countRecurrances(wordsFiltered, config.MAX_COUNT);
+
+            this.parseExtract(sorted).then((extractParsed) => {
               extractParsed.title = title;
               extractParsed.words = wordsFiltered;
+              extractParsed.countMap = countMap;
+              extractParsed.sorted = sorted;
               resolve(extractParsed);
             }).catch((err) => {
               reject(err);
