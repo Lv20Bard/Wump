@@ -163,6 +163,7 @@ li{
   border-bottom:1px solid #e6ecf0;
 
   width:100%;
+  animation: fade-in 1.0s;
 }
 
 .content{
@@ -182,7 +183,7 @@ li{
 }
 
 .tweetBody{
-    word-wrap: break-word;
+  word-wrap: break-word;
 }
 
 .avatar{
@@ -193,6 +194,11 @@ li{
   margin-top:3px;
   margin-left: 20px;
   
+}
+
+@keyframes fade-in {
+  0% {opacity: 0}
+  100% {opacity: 1}
 }
 
 @media (max-width: 1199px){

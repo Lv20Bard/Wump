@@ -1,13 +1,18 @@
 import React,{Component} from 'react';
 
 export default class Tweet extends Component{
+
+      
       constructor(props){
             super(props);
+      }
+
+      componentDidMount() {
       }
       
       render(){
             return(
-                  <div className="tweetWrapper container">
+                  <div className={`tweetWrapper container`}>
                         <div className="row">
                               <img className="img avatar" src="https://pbs.twimg.com/profile_images/1980294624/DJT_Headshot_V2_bigger.jpg" alt=" "/>
                               <div className=" col-sm-10">      

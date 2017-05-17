@@ -89,7 +89,11 @@ function createTweetString(savedResult) {
 app.get('/saved', (req, res) => {
   SavedResults.find({}).sort({ timestamp: -1 }).then((savedResults) => {
     res.json({
-      tweets: savedResults.map(result => createTweetString(result))
+      tweets: savedResults.map(result => ({
+        tweet: createTweetString(result),
+        timestamp: result.timestamp,
+        id: result._id
+      }))
     });
   }).catch((err) => {
     console.error('Error finding saved results:', err);
@@ -104,7 +108,11 @@ app.get('/search/:q', (req, res) => {
 
     // send to sockets
     const tweetStrings = results.map((result) => {
-      return createTweetString(result);
+      return {
+        tweet: createTweetString(result),
+        timestamp: result.timestamp,
+        id: result._id
+      };
       
     });
 
@@ -252,7 +260,11 @@ function loadArticle(title) {
       title: new RegExp(titleSanitized, 'i')
     }).then((savedResults) => {
       if (savedResults != null && savedResults.length > 0) {
-        return savedResults;
+        // set timestamp to now
+        return savedResults.map((result) => {
+          result.timestamp = new Date();
+          return result;
+        });
       } else {
         return makeRequest(titleSanitized);
       }
@@ -265,8 +277,4 @@ function loadArticle(title) {
 (function (port) {
   console.log(`Listening on port ${port}...`);
   server.listen(port);
-
-  io.on('connection', function (socket) {
-    console.log('new connection:', socket.id);
-  });
 })(9001);

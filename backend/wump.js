@@ -25,8 +25,6 @@ module.exports = {
         adjectives: adjectives.sort((a, b) => {
           const aIndex = wordsFiltered.indexOf(a);
           const bIndex = wordsFiltered.indexOf(b);
-
-          //console.log('[aIndex, bIndex = ', [aIndex, bIndex]);
           
           if (aIndex > bIndex) {
             return 1;
