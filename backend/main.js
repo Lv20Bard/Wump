@@ -128,8 +128,12 @@ function createTweetString(savedResult) {
 }
 
 
-app.get('/saved', (req, res) => {
-  SavedResults.find({}).sort({ timestamp: -1 }).then((savedResults) => {
+app.get('/saved/:offset/:amount', (req, res) => {
+  SavedResults.find({})
+  .offset(parseInt(req.params.offset))
+  .limit(parseInt(req.params.amount))
+  .sort({ timestamp: -1 })
+  .then((savedResults) => {
     res.json({
       tweets: savedResults.map(result => ({
         tweet: createTweetString(result),
@@ -165,84 +169,6 @@ app.get('/search/:q', (req, res) => {
     res.json({
       tweets: tweetStrings
     });
-
-    // fill in with tweet data
-    /*Promise.all(results.map((el, i) => {
-      const tweet = TEMPLATE_TWEETS[Math.min(TEMPLATE_TWEETS.length - 1), i];
-
-      // split tweet by whitespace
-      const tweetSplit = tweet.split(/\s+/g)
-        .map(word => word.replace(/[.,!;":(){}]/g, ' '))
-        .filter((str) => {
-          return str != '';
-        });
-      
-      return wump.parseExtract(tweetSplit).then((tweetParsed) => {
-        return { tweet, tweetParsed };
-      });
-    })).then((tweetData) => {
-      
-      const tweetsSubstituted = results.map((result, i) => {
-        let tweetDataAt = tweetData[i];
-
-        if (result.adjectives.length != 0) {
-          // replace adjectives
-          tweetDataAt.tweetParsed.adjectives.forEach((adj, adjI) => {
-            // replace in tweet
-              tweetDataAt.tweet = tweetDataAt.tweet.replace(
-                adj,
-                result.adjectives[adjI % result.adjectives.length]
-              );
-          });
-        }
-
-        if (result.nouns.length != 0) {
-          // replace nouns
-          tweetDataAt.tweetParsed.nouns.forEach((noun, nounI) => {
-            // replace in tweet
-            tweetDataAt.tweet = tweetDataAt.tweet.replace(
-              noun,
-              result.nouns[nounI % result.nouns.length]
-            );
-          });
-        }
-
-        return tweetDataAt;
-      });
-
-      console.log('tweetsSubstituted = ', tweetsSubstituted);
-
-      
-      results.forEach((result) => {
-
-        for (let i = 0; i < Math.min(result.adjectives.length, result.nouns.length); i++) {
-          const rand = util.getRandomInt(0, 2);
-
-          switch (rand) {
-            case 0:
-              console.log(`${nounInflector.pluralize(result.nouns[i])}.`);
-              break;
-            case 1:
-              console.log(`${result.adjectives[i]} ${result.nouns[i]}.`);
-              break;
-            case 2:
-              console.log(`${result.adjectives[i].toUpperCase()}!!!`);
-              break;
-            
-          }
-          
-        }
-
-        
-      })
-
-      res.json({ results });
-    }).catch((err) => {
-      console.error('Error parsing tweets:', err);
-      res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
-        error: err.message
-      });
-    });*/
   }).catch((err) => {
     console.error('Error loading results:', err);
     res.status(httpStatus.BAD_REQUEST).json({

@@ -17,7 +17,6 @@ export default class Main extends Component{
       componentDidMount(){
             axios.get('http://localhost:9001/saved')
             .then((res) => {
-                  console.log('saved:', res.data.tweets);
                   this.setState({
                         wumps: res.data.tweets
                   });

@@ -25,7 +25,6 @@ export default class TweetFeed extends Component {
                               })}
                         </ol>
                   </div>
-                  <VisibilitySensor />
                   
             )
       }
