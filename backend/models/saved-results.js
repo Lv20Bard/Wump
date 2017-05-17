@@ -5,6 +5,7 @@ var savedResultsSchema = new mongoose.Schema({
   countMap: mongoose.Schema.Types.Mixed,
   sortedWords: [String],
   adjectives: [String],
+  adverbs: [String],
   nouns: [String],
   timestamp: Date
 });

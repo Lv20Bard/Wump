@@ -44,7 +44,7 @@ function createTweetString(savedResult) {
   const titleDecoded = decodeURIComponent(savedResult.title);
 
   let str = titleDecoded;
-  str += ': ' + savedResult.nouns
+  str += ': ' + savedResult.nouns.concat(savedResult.adjectives)
     .slice(0, 10)
     .sort((a, b) => {
       return 0.5 - Math.random();
@@ -60,7 +60,12 @@ function createTweetString(savedResult) {
       str += 'SAD!';
       break;
     case 1:
-      str += 'Phony hypocrites.';
+      str += 'Phony hypocrite';
+
+      if (nounInflector.pluralize(titleDecoded) == titleDecoded) {
+        str += 's';
+      }
+      str += '.';
       break;
     case 2:
       str += 'NO!';
@@ -72,13 +77,50 @@ function createTweetString(savedResult) {
       str += '#FakeNews';
       break;
     case 5:
-      str += `We have the best ${titleDecoded}!`;
+      str += `We have the best ${nounInflector.singularize(titleDecoded)} of ALL the ${nounInflector.pluralize(titleDecoded)}!`;
       break;
     case 6:
-      str += 'Sad!';
+      str = titleDecoded;
+      
+      if (nounInflector.pluralize(titleDecoded) == titleDecoded) {
+        str += ' are ';
+      } else {
+        str += ' is ';
+      }
+      
+      if (savedResult.adjectives != null) {
+        if (savedResult.adjectives.length != 0) {
+          const count = Math.min(4, savedResult.adjectives.length);
+          for (let i = 0; i < count; i++) {
+            str += savedResult.adjectives[i];
+            if (i == count - 2) {
+              str += ' and ';
+            } else if (i != count - 1) {
+              str += ', ';
+            }
+          }
+        } else {
+          str += 'crude, rude, obnoxious and dumb';
+        }
+      } else {
+        str += 'crude, rude, obnoxious and dumb';
+      }
+
+      str += ` - other than that I like ${titleDecoded} very much!`;
+
       break;
     case 7:
-      str += 'Not good.';
+      str += 'What ';
+      if (savedResult.nouns != null && savedResult.nouns[0] != null) {
+        
+        if (nounInflector.pluralize(savedResult.nouns[0]) == savedResult.nouns[0]) {
+          str += savedResult.nouns[0].toUpperCase() + '!';
+        } else {
+          str += 'a ' + savedResult.nouns[0].toUpperCase() + '!';
+        }
+      } else {
+        str += 'a JOKE!';
+      }
       break;
   }
 
@@ -89,7 +131,11 @@ function createTweetString(savedResult) {
 app.get('/saved', (req, res) => {
   SavedResults.find({}).sort({ timestamp: -1 }).then((savedResults) => {
     res.json({
-      tweets: savedResults.map(result => createTweetString(result))
+      tweets: savedResults.map(result => ({
+        tweet: createTweetString(result),
+        timestamp: result.timestamp,
+        id: result._id
+      }))
     });
   }).catch((err) => {
     console.error('Error finding saved results:', err);
@@ -104,7 +150,11 @@ app.get('/search/:q', (req, res) => {
 
     // send to sockets
     const tweetStrings = results.map((result) => {
-      return createTweetString(result);
+      return {
+        tweet: createTweetString(result),
+        timestamp: result.timestamp,
+        id: result._id
+      };
       
     });
 
@@ -202,7 +252,7 @@ app.get('/search/:q', (req, res) => {
 });
 
 function makeRequest(title) {
-  return request(`https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro=&explaintext=&titles=${title}`, {
+  return request(`https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro=&explaintext=&titles=${title}&redirects`, {
     method: 'GET'
   }).then((res) => {
     const bodyJson = JSON.parse(res);
@@ -222,6 +272,7 @@ function makeRequest(title) {
           sortedWords: page.sorted,
           adjectives: page.adjectives,
           nouns: page.nouns,
+          adverbs: page.adverbs,
           timestamp: new Date
         }).save().then((wump) => {
           return wump;
@@ -252,7 +303,11 @@ function loadArticle(title) {
       title: new RegExp(titleSanitized, 'i')
     }).then((savedResults) => {
       if (savedResults != null && savedResults.length > 0) {
-        return savedResults;
+        // set timestamp to now
+        return savedResults.map((result) => {
+          result.timestamp = new Date();
+          return result;
+        });
       } else {
         return makeRequest(titleSanitized);
       }
@@ -265,8 +320,4 @@ function loadArticle(title) {
 (function (port) {
   console.log(`Listening on port ${port}...`);
   server.listen(port);
-
-  io.on('connection', function (socket) {
-    console.log('new connection:', socket.id);
-  });
 })(9001);

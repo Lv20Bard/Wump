@@ -172,6 +172,7 @@ div{
   animation: fade-in 0.3s;
 
   width:100%;
+  animation: fade-in 1.0s;
 }
 
 .content{
@@ -191,8 +192,9 @@ div{
 }
 
 .tweetBody{
+
     word-wrap: break-word;
-    
+
 }
 
 .avatar{
@@ -204,6 +206,7 @@ div{
   margin-left: 20px;
   
 }
+
 
 
 @keyframes fade-in{
