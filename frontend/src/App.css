@@ -25,9 +25,6 @@ li{
   list-style-type:none;
 }
 
-div{
-  transition: all 3s ease;
-}
 
 .header{
   background: #ffffff;
