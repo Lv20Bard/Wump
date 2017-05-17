@@ -13,12 +13,6 @@ export default class Main extends Component{
             };
       }
 
-      handleWumpPosted = (wump) => {
-            this.setState({
-                  wumps: [wump].concat(this.state.wumps)
-            });
-      };
-
       // Get all the wumps
       componentDidMount(){
             axios.get('http://localhost:9001/saved')
@@ -31,8 +25,25 @@ export default class Main extends Component{
                         console.log(err);
                   }
             });
+
+            if (typeof window.socket !== undefined) {
+                  // add socket listener
+                  window.socket.on('new wump', (wump) => {
+                        this.setState({
+                              wumps: [wump].concat(this.state.wumps)
+                        });
+                  });
+            }
       }
 
+
+      handleWumpPosted = (wump) => {
+            /*this.setState({
+                  wumps: [wump].concat(this.state.wumps)
+            });*/
+
+            // NOTE: Commented out because sockets do the job now.
+      };
       render(){
             return(
                   <div className="main container">

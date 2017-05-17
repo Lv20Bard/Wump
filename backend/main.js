@@ -17,6 +17,7 @@ mongoose.connect('mongodb://localhost/wump');
 
 const app = express();
 const server = http.createServer(app);
+const io = require('socket.io')(server);
 
 const TEMPLATE_TWEETS = [
   'Relish the opp to be an outsider. Embrace that label- b/c it’s the outsiders who change the world, and who make a real & lasting difference! China just agreed that the U.S. will be allowed to sell beef, and other major products, into China once again. This is REAL news!',
@@ -100,8 +101,19 @@ app.get('/saved', (req, res) => {
 
 app.get('/search/:q', (req, res) => {
   loadArticle(req.params.q).then((results) => {
+
+    // send to sockets
+    const tweetStrings = results.map((result) => {
+      return createTweetString(result);
+      
+    });
+
+    tweetStrings.forEach((tweetString) => {
+      io.emit('new wump', tweetString);
+    });
+
     res.json({
-      tweets: results.map(result => createTweetString(result))
+      tweets: tweetStrings
     });
 
     // fill in with tweet data
@@ -204,8 +216,6 @@ function makeRequest(title) {
 
     return wump.parsePages(pages).then((parsed) => {
       return Promise.all(parsed.map((page) => {
-        
-
         return new SavedResults({
           title: sanitizeTitle(page.title),
           countMap: page.countMap,
@@ -213,7 +223,9 @@ function makeRequest(title) {
           adjectives: page.adjectives,
           nouns: page.nouns,
           timestamp: new Date
-        }).save();
+        }).save().then((wump) => {
+          return wump;
+        });
       }));
     });
 
@@ -253,4 +265,8 @@ function loadArticle(title) {
 (function (port) {
   console.log(`Listening on port ${port}...`);
   server.listen(port);
+
+  io.on('connection', function (socket) {
+    console.log('new connection:', socket.id);
+  });
 })(9001);
