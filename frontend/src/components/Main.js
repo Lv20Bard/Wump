@@ -15,18 +15,7 @@ export default class Main extends Component{
 
       // Get all the wumps
       componentDidMount(){
-            axios.get('http://localhost:9001/saved')
-            .then((res) => {
-                  console.log('saved:', res.data.tweets);
-                  this.setState({
-                        wumps: res.data.tweets
-                  });
-            })
-            .catch(function(err){
-                  if(err){
-                        console.log(err);
-                  }
-            });
+            this.loadWumps(0,10);
 
             if (typeof window.socket !== undefined) {
                   // add socket listener
@@ -38,6 +27,22 @@ export default class Main extends Component{
             }
       }
 
+      loadWumps(offset, amount){
+            axios.get(`http://localhost:9001/saved/${offset}/${amount}`)
+            .then((res) => {
+                  console.log('saved:', res.data.tweets);
+                  this.setState({
+                        wumps: res.data.tweets.concat(this.state.wumps)
+                  })
+            })
+            .catch(function(err){
+                  if(err){
+                        console.log(err);
+                  }
+            });
+
+      
+      }
 
       handleWumpPosted = (wump) => {
             /*this.setState({

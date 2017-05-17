@@ -1,6 +1,5 @@
 import React,{Component} from 'react';
 import Tweet from './Tweet';
-import axios from 'axios';
 import VisibilitySensor from 'react-visibility-sensor'
 
 export default class TweetFeed extends Component {
@@ -24,9 +23,9 @@ export default class TweetFeed extends Component {
                                     );
                               })}
                         </ol>
+                        {/*<VisibilitySensor onChange={onChange} />*/}
                   </div>
-                  <VisibilitySensor />
-                  
+                
             )
       }
 }
