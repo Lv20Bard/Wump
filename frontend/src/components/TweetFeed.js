@@ -16,7 +16,7 @@ export default class TweetFeed extends Component {
                         <ol className="feedSectionInner col-sm-12">
                               {this.props.wumps.map((wump, i) => {
                                     return(
-                                          <li className="feedItem" key={wump.id}>
+                                          <li className="feedItem" key={wump._id}>
                                                 <Tweet data={wump.tweet}/>
                                           </li>
                                     );

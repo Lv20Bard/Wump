@@ -7,6 +7,7 @@ var bodyParser = require('body-parser');
 var natural = require('natural');
 var nounInflector = new natural.NounInflector();
 
+var { SavedTweet } = require('./models/saved-tweet');
 var { SavedResults } = require('./models/saved-results');
 var config = require('./config');
 var util = require('./util');
@@ -124,12 +125,33 @@ function createTweetString(savedResult) {
       break;
   }
 
-  return str;
+  return new SavedTweet({
+    tweet: str,
+    savedResult: savedResult,
+    timestamp: new Date
+  }).save().then((savedTweet) => {
+    return savedTweet;
+  });
 }
 
 
 app.get('/saved/:offset/:amount', (req, res) => {
-  SavedResults.find({})
+  SavedTweet.find({})
+  .sort({ timestamp: -1 })
+  .skip(parseInt(req.params.offset))
+  .limit(parseInt(req.params.amount))
+  .then((savedTweets) => {
+    res.json({
+      tweets: savedTweets
+    });
+  }).catch((err) => {
+    console.error('Error finding saved tweets:', err);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
+      error: err.message
+    });
+  });
+
+  /*SavedResults.find({})
   .sort({ timestamp: -1 })
   .skip(parseInt(req.params.offset))
   .limit(parseInt(req.params.amount))
@@ -146,28 +168,27 @@ app.get('/saved/:offset/:amount', (req, res) => {
     res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
       error: err.message
     });
-  });
+  });*/
 });
 
 app.get('/search/:q', (req, res) => {
   loadArticle(req.params.q).then((results) => {
 
-    // send to sockets
-    const tweetStrings = results.map((result) => {
-      return {
-        tweet: createTweetString(result),
-        timestamp: result.timestamp,
-        id: result._id
-      };
-      
-    });
+    Promise.all(results.map((result) => {
+      return createTweetString(result);
+    })).then((savedTweets) => {
+      savedTweets.forEach((tweet) => {
+        io.emit('new wump', tweet);
+      });
 
-    tweetStrings.forEach((tweetString) => {
-      io.emit('new wump', tweetString);
-    });
-
-    res.json({
-      tweets: tweetStrings
+      res.json({
+        tweets: savedTweets
+      });
+    }).catch((err) => {
+      console.error('Error creating tweet strings:', err);
+      res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
+        error: err.message
+      });
     });
   }).catch((err) => {
     console.error('Error loading results:', err);
