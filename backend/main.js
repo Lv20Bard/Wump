@@ -41,11 +41,26 @@ app.use((req, res, next) => {
   }
 });
 
+console.log(summary(
+  `
+  Donald John Trump (born June 14, 1946) is the 45th and current President of the United States. Before entering politics, he was a businessman and television personality.
+
+Trump was born and raised in Queens, New York City, and earned an economics degree from the Wharton School. He then took charge of The Trump Organization, the real estate and construction firm founded by his paternal grandmother, which he ran for 45 years until 2016. During his real estate career, Trump built, renovated, and managed numerous office towers, hotels, casinos, and golf courses. Besides real estate, he started several side ventures and has licensed the use of his name for the branding of various products and properties. He owned the Miss USA and Miss Universe pageants from 1996 to 2015, and he produced and hosted The Apprentice, a reality television series on NBC, from 2004 to 2015. His net worth was estimated to be $3.5 billion as of 2017, making him the 544th richest person in the world.
+
+Trump first publicly expressed interest in running for political office in 1987. He won two Reform Party presidential primaries in 2000, but withdrew his candidacy early on. In June 2015, he launched his campaign for the 2016 presidential election and quickly emerged as the front-runner among seventeen candidates in the Republican primaries. His remaining opponents suspended their campaigns in May 2016, and in July he was formally nominated at the Republican National Convention along with Indiana governor Mike Pence as his running mate. Many of his campaign statements were controversial or false, generating much free media coverage.
+  `,
+
+  2
+
+));
+
+
+
 function createTweetString(savedResult) {
   const titleDecoded = decodeURIComponent(savedResult.title);
 
   let str = titleDecoded;
-  str += ': ' + savedResult.nouns.concat(savedResult.adjectives)
+  str += ': ' + savedResult.sortedWords
     .slice(0, 10)
     .sort((a, b) => {
       return 0.5 - Math.random();
@@ -78,7 +93,7 @@ function createTweetString(savedResult) {
       str += '#FakeNews';
       break;
     case 5:
-      str += `We have the best ${nounInflector.singularize(titleDecoded)} of ALL the ${nounInflector.pluralize(titleDecoded)}!`;
+      str = `We have the best ${nounInflector.singularize(titleDecoded)} of ALL the ${nounInflector.pluralize(titleDecoded)}!`;
       break;
     case 6:
       str = titleDecoded;
