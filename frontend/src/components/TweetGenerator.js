@@ -47,7 +47,7 @@ export default class TweetGenerator extends Component{
                         <div className="innerGenerator">
                               <img className="avatarImage" src="https://pbs.twimg.com/profile_images/1980294624/DJT_Headshot_V2_400x400.jpg" alt=" " />
                               <form className="wumpForm" onSubmit={this.handleSubmit} >
-                                    <input type="text" className="wumpContent" placeholder="insert wikipedia url here" value={this.state.url} onChange={this.handleURLChange}></input>
+                                    <input type="text" className="wumpContent" placeholder="insert the title of a wikipedia article" value={this.state.url} onChange={this.handleURLChange}></input>
                                     <input type="submit" value="Wump" className="wumpBtn"></input>
                               </form>
                               
